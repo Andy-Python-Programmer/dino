@@ -2,7 +2,7 @@
 name = "dino"
 version = "0.1.0"
 authors = ["Anhad Singh <andypythonappdeveloper@gmail.com>"]
-license = "MIT or Apache-2.0"
+license = "MIT OR Apache-2.0"
 keywords = ["json", "database"]
 categories = ["database"]
 readme = "README.md"
