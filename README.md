@@ -1,5 +1,8 @@
 # Dino
 
+![Crates.io](https://img.shields.io/crates/d/dino)
+![Crates.io](https://img.shields.io/crates/v/dino)
+
 ## License
 
 Licensed under either of Apache License, Version 2.0 or MIT license at your option.
