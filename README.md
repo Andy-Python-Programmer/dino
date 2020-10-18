@@ -5,7 +5,7 @@
 
 ## Example Code
 
-```rs
+```rust
 // Create the database instance
 let mut db = Database::new("./hello.dino");
 
