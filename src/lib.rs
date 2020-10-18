@@ -1,4 +1,5 @@
 use std::fs::{ OpenOptions, File };
+use std::io::SeekFrom;
 use std::io::prelude::*;
 
 /// The main struct of Dino.
@@ -53,16 +54,23 @@ impl Database {
 
     /// Insert a key with a subtree in the database
     pub fn insert_tree(&mut self, key: &str, value: Tree) {
-        self.file.as_ref().unwrap().set_len(0).unwrap();
+        self.truncate();
+
         self.json.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::from_str(value.children.unwrap().to_string().as_str()).unwrap());
         self.file.as_mut().unwrap().write(self.json.as_ref().unwrap().to_string().as_bytes()).expect("Cannot write to the database!");
     }
 
     /// Insert a key and a value in the database
     pub fn insert(&mut self, key: &str, value: &str) {
-        self.file.as_ref().unwrap().set_len(0).unwrap();
+        self.truncate();
+        
         self.json.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::json!(value));
         self.file.as_mut().unwrap().write(self.json.as_ref().unwrap().to_string().as_bytes()).expect("Cannot write to the database!");
+    }
+
+    fn truncate(&mut self) {
+        self.file.as_ref().unwrap().set_len(0).unwrap();
+        self.file.as_ref().unwrap().seek(SeekFrom::Start(0)).unwrap();
     }
 
     /// Find a value in the db
