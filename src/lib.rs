@@ -68,6 +68,14 @@ impl Database {
         self.file.as_mut().unwrap().write(self.json.as_ref().unwrap().to_string().as_bytes()).expect("Cannot write to the database!");
     }
 
+    /// Remove a key in the database with its value
+    pub fn remove(&mut self, key: &str) {
+        self.truncate();
+        
+        self.json.as_mut().unwrap().as_object_mut().unwrap().remove(key);
+        self.file.as_mut().unwrap().write(self.json.as_ref().unwrap().to_string().as_bytes()).expect("Cannot write to the database!");
+    }
+
     fn truncate(&mut self) {
         self.file.as_ref().unwrap().set_len(0).unwrap();
         self.file.as_ref().unwrap().seek(SeekFrom::Start(0)).unwrap();
