@@ -1,5 +1,6 @@
 # Dino
 
+![Crates.io](https://github.com/Andy-Python-Programmer/dino/workflows/Build/badge.svg)
 ![Crates.io](https://img.shields.io/crates/d/dino)
 ![Crates.io](https://img.shields.io/crates/v/dino)
 
