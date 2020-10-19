@@ -24,5 +24,6 @@ fn main() {
     // Print the value of id
     println!("The value of key: id is {}", db.find("id"));
 
+    // Remove a key in the database with its value
     db.remove("id");
 }
