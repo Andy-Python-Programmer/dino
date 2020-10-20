@@ -82,10 +82,14 @@ impl Database {
     }
 
     /// Find a value in the db
-    pub fn find(&self, key: &str) -> &serde_json::Value {
+    pub fn find(&self, key: &str) -> Result<&serde_json::Value, String> {
         let val = &self.json.as_ref().unwrap()[key];
 
-        return val;
+        if val == &serde_json::Value::Null {
+            return Err(format!("The key `{}` does not exist in the database. You might want to create this or handle the error!", key))
+        }
+
+        return Ok(val);
     }
 }
 

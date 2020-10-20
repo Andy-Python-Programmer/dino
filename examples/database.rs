@@ -22,7 +22,17 @@ fn main() {
     db.insert_tree("id", data_tree);
 
     // Print the value of id
-    println!("The value of key: id is {}", db.find("id"));
+    println!("The value of key: id is {}", db.find("id").unwrap());
+
+    match db.find("not_exists") {
+        Ok(_value) => {
+            println!("This is unfortunate :(")
+        }
+
+        Err(error) => {
+            println!("Everting works! Here is the error for reference: {}", error)
+        }
+    }
 
     // Remove a key in the database with its value
     db.remove("id");
