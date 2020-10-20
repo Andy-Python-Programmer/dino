@@ -57,7 +57,7 @@
 //! }
 //! 
 //! ```
-//! ## Querying the Database
+//! ## Basic Operations
 //! ```rust
 //! // Create the database instance
 //! let mut db = Database::new("./basic.dino");
