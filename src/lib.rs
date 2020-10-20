@@ -38,8 +38,6 @@ impl Database {
             .read(true)
             .write(true)
             .create(true)
-            .append(false)
-            .truncate(true)
             .open(&self.path.to_string())
             .unwrap();
         
@@ -47,9 +45,11 @@ impl Database {
 
         file.read_to_string(&mut buf).unwrap();
 
+        let json = serde_json::from_str(if buf == "" { "{}" } else { buf.as_str() }).unwrap();
+
         self.file = Some(file);
         self.data = Some(buf);
-        self.json = Some(serde_json::from_str("{}").unwrap());
+        self.json = Some(json);
     }
 
     /// Insert a key with a subtree in the database
@@ -76,6 +76,8 @@ impl Database {
         self.file.as_mut().unwrap().write(self.json.as_ref().unwrap().to_string().as_bytes()).expect("Cannot write to the database!");
     }
 
+    /// Private function but is very important. 
+    /// This truncates the db before we write the json code again
     fn truncate(&mut self) {
         self.file.as_ref().unwrap().set_len(0).unwrap();
         self.file.as_ref().unwrap().seek(SeekFrom::Start(0)).unwrap();
