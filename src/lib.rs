@@ -105,17 +105,37 @@ impl Database {
     }
 }
 
+/// The struct that allows you to create sub trees in the main tree in the database
+/// Sub trees do not auto insert in the main tree of the database
+/// You can do that by doing
+/// # Example
+/// ```rust
+/// // Create the database instance
+/// let mut db = Database::new("./hello.dino");
+/// 
+/// // Load and create the database if does not exist
+/// db.load();
+///
+/// // Create a new sub Tree in the main Tree of the db
+/// let mut data_tree = Tree::new();
+///
+/// // Insert the [data_tree] under the main tree
+/// db.insert_tree("id", data_tree);
+/// ```
+/// Where the key always need to be a [String]
 pub struct Tree {
     pub children: Option<serde_json::Value>
 }
 
 impl Tree {
+    /// Create a new sub tree
     pub fn new() -> Tree {
         return Tree {
             children: serde_json::from_str("{}").unwrap()
         }
     }
 
+    /// Insert data in the sub tree
     pub fn insert(&mut self, key: &str, value: &str) {
         self.children.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::Value::String(value.to_string()));
     }
