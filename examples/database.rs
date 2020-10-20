@@ -41,4 +41,6 @@ fn main() {
     if db.contains_key("id") {
         println!("The key `id` exists!")
     };
+
+    println!("The length of items in the database is: {}", db.len());
 }

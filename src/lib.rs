@@ -96,6 +96,11 @@ impl Database {
     pub fn contains_key(&mut self, key: &str) -> bool {
         return self.json.as_mut().unwrap().as_object_mut().unwrap().contains_key(key);
     }
+
+    /// Return the length of items that are in the databse
+    pub fn len(&mut self) -> usize {
+        return self.json.as_mut().unwrap().as_object_mut().unwrap().len();
+    }
 }
 
 pub struct Tree {
