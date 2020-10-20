@@ -23,7 +23,6 @@ db.insert("key-2", "value-2");
 ### Sub Trees
 
 ```rust
-
 // Create the database instance
 let mut db = Database::new("./sub_trees.dino");
 

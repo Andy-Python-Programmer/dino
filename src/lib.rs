@@ -1,3 +1,37 @@
+//! ## Basic Database
+//! 
+//! ```rust
+//! // Create the database instance
+//! let mut db = Database::new("./basic.dino");
+//!
+//! // Load and create the database if does not exist
+//! db.load();
+
+//! // Insert values in the db in the format of key, value
+//! db.insert("key-1", "value-1");
+//! db.insert("key-2", "value-2");
+//! ```
+//! 
+//! ## Sub Trees
+//! 
+//! ```rust
+//! 
+//! // Create the database instance
+//! let mut db = Database::new("./sub_trees.dino");
+//! 
+//! // Load and create the database if does not exist
+//! db.load();
+//! 
+//! // Create a new sub Tree in the main Tree of the db
+//! let mut data_tree = Tree::new();
+//! 
+//! // Insert the key and value in the sub tree
+//! data_tree.insert("a", "b");
+//! 
+//! // Insert the [data_tree] under the main tree
+//! db.insert_tree("id", data_tree);
+//! ```
+
 use std::fs::{ OpenOptions, File };
 use std::io::SeekFrom;
 use std::io::prelude::*;
