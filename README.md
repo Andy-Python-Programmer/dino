@@ -52,7 +52,7 @@ db.load();
 db.insert("key-1", "value-1");
 
 // Print the value of `key-1`
-println!("The value of key: id is {}", db.find("key-1"));
+println!("The value of key: id is {}", db.find("key-1").unwrap());
 ```
 
 There is a lot more for you to explore! So check out https://docs.rs/dino/0.1.0/dino/ and the most important /examples/ directory!

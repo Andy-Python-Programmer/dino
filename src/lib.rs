@@ -6,7 +6,7 @@
 //!
 //! // Load and create the database if does not exist
 //! db.load();
-
+//!
 //! // Insert values in the db in the format of key, value
 //! db.insert("key-1", "value-1");
 //! db.insert("key-2", "value-2");
@@ -30,6 +30,53 @@
 //! 
 //! // Insert the [data_tree] under the main tree
 //! db.insert_tree("id", data_tree);
+//! ```
+//! 
+//! ## Querying the Database
+//! ```rust
+//! // Create the database instance
+//! let mut db = Database::new("./basic.dino");
+//! 
+//! // Load and create the database if does not exist
+//! db.load();
+//!
+//! // Insert values in the db in the format of key, value
+//! db.insert("key-1", "value-1");
+//! 
+//! // Print the value of `key-1`
+//! println!("The value of key: id is {}", db.find("key-1").unwrap());
+//! 
+//! match db.find("not_exists") {
+//!     Ok(_value) => {
+//!         println!("This is unfortunate :(")
+//!     }
+//!
+//!     Err(error) => {
+//!         println!("Everting works! Here is the error for reference: {}", error)
+//!     }
+//! }
+//! 
+//! ```
+//! ## Querying the Database
+//! ```rust
+//! // Create the database instance
+//! let mut db = Database::new("./basic.dino");
+//! 
+//! // Load and create the database if does not exist
+//! db.load();
+//!
+//! // Insert values in the db in the format of key, value
+//! db.insert("id", "value-1");
+//! 
+//! // Remove a key in the database with its value
+//! db.remove("id");
+//!
+//! // Now here it wont print that it exists as it does not we removed it ^^^^^
+//! if db.contains_key("id") {
+//!     println!("The key `id` exists!")
+//! };
+//!
+//! println!("The length of items in the database is: {}", db.len());
 //! ```
 
 use std::fs::{ OpenOptions, File };
