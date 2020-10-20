@@ -91,6 +91,11 @@ impl Database {
 
         return Ok(val);
     }
+
+    /// Check if the key exists in the database
+    pub fn contains_key(&mut self, key: &str) -> bool {
+        return self.json.as_mut().unwrap().as_object_mut().unwrap().contains_key(key);
+    }
 }
 
 pub struct Tree {

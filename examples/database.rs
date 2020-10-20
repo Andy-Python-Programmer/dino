@@ -36,4 +36,9 @@ fn main() {
 
     // Remove a key in the database with its value
     db.remove("id");
+
+    // Now here it wont print that it exists as it does not we removed it ^^^^^
+    if db.contains_key("id") {
+        println!("The key `id` exists!")
+    };
 }
