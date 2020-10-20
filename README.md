@@ -56,6 +56,8 @@ db.insert("key-1", "value-1");
 println!("The value of key: id is {}", db.find("key-1"));
 ```
 
+There is a lot more for you to explore! So check out https://docs.rs/dino/0.1.0/dino/ and the most important /examples/ directory!
+
 ## License
 
 Licensed under either of Apache License, Version 2.0 or MIT license at your option.
