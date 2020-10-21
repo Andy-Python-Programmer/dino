@@ -18,6 +18,10 @@ fn main() {
     // Insert the key and value in the sub tree
     data_tree.insert("b", "c");
 
+    // The length of items in the sub tree in the database
+    // This also shows almost all of the functions in Database are also avaliable in Tree
+    println!("The length of items in the sub tree in the database is: {}", data_tree.len());
+
     // Insert the [data_tree] under the main tree
     db.insert_tree("id", data_tree);
 
