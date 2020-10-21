@@ -225,4 +225,30 @@ impl Tree {
     pub fn len(&mut self) -> usize {
         return self.children.as_mut().unwrap().as_object_mut().unwrap().len();
     }
+
+    /// Remove a key in the sub tree in the database with its value
+    pub fn remove(&mut self, key: &str) {
+        self.children.as_mut().unwrap().as_object_mut().unwrap().remove(key);
+    }
+
+    /// Find a value in the sub tree in the database
+    pub fn find(&self, key: &str) -> Result<&serde_json::Value, String> {
+        let val = &self.children.as_ref().unwrap()[key];
+
+        if val == &serde_json::Value::Null {
+            return Err(format!("The key `{}` does not exist in the database. You might want to create this or handle the error!", key))
+        }
+
+        return Ok(val);
+    }
+
+    /// Check if the key exists in the sub tree of the main database
+    pub fn contains_key(&mut self, key: &str) -> bool {
+        return self.children.as_mut().unwrap().as_object_mut().unwrap().contains_key(key);
+    }
+
+    /// Insert a key with a subtree in the subtree!
+    pub fn insert_tree(&mut self, key: &str, value: Tree) {
+        self.children.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::from_str(value.children.unwrap().to_string().as_str()).unwrap());
+    }
 }
