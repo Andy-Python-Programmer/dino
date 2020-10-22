@@ -55,9 +55,9 @@ db.insert("key-1", "value-1");
 println!("The value of key: id is {}", db.find("key-1").unwrap());
 ```
 
-## Using [Dino](https://crates.io/crates/dino) with [Rocket](https://crates.io/crates/rocket)!
+<img src="dist/rocket.png" height="100px">
 
-### Basic Dino with Rocket example!
+## Using [Dino](https://crates.io/crates/dino) with [Rocket](https://crates.io/crates/rocket)!
 
 ```rust
 // Simple rocket route
