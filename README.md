@@ -55,6 +55,56 @@ db.insert("key-1", "value-1");
 println!("The value of key: id is {}", db.find("key-1").unwrap());
 ```
 
+## Using [Dino](https://crates.io/crates/dino) with [Rocket](https://crates.io/crates/rocket)!
+
+### Basic Dino with Rocket example!
+
+```rust
+// Simple rocket route
+#[get("/<id>")]
+// Here we add the arg `db: State<dino::Database>`
+// To get the db state that we passed before!
+fn hello(db: State<dino::Database>, id: String) -> String {
+    // Now in this rocket route we take a id param
+    // We will extract the param to str
+    // Then check if it exists
+    match db.find(id.as_str()) {
+        // If it exists it will return Ok(value)
+        Ok(value) => {
+            // Then we can return the value!
+            return value.to_string();
+        }
+
+        // If it does not exists it gives a error
+        Err(error) => {
+            // So return the error!
+            // You might want to handle the error too!
+            return error;
+        }
+    }
+}
+
+fn main() {
+    // Create the database instance
+    let mut db = dino::Database::new("rocket.dino");
+
+    // Load and create the database if does not exist
+    db.load();
+
+    // Insert a key with a dummy value for now!
+    db.insert("key", "value!");
+
+    // Ignite the rocket and mount the routes
+    rocket::ignite()
+        .mount("/", routes![hello])
+        // Important part here!
+        // Here we pass the db state to rocket
+        // So we can access it when we go to any route.
+        .manage(db)
+        .launch();
+}
+```
+
 There is a lot more for you to explore! So check out https://docs.rs/dino/0.1.0/dino/ and the most important /examples/ directory!
 
 ## License
