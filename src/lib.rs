@@ -216,6 +216,12 @@ impl Tree {
         }
     }
 
+    pub fn from(value: &str) -> Tree {
+        return Tree {
+            children: serde_json::from_str(value).unwrap()
+        }
+    }
+
     /// Insert data in the sub tree
     pub fn insert(&mut self, key: &str, value: &str) {
         self.children.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::Value::String(value.to_string()));
