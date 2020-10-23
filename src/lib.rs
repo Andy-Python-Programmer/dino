@@ -166,14 +166,14 @@ impl Database {
     }
 
     /// Find a value in the db
-    pub fn find(&self, key: &str) -> Result<&serde_json::Value, String> {
+    pub fn find(&self, key: &str) -> Result<Tree, String> {
         let val = &self.json.as_ref().unwrap()[key];
 
         if val == &serde_json::Value::Null {
             return Err(format!("The key `{}` does not exist in the database. You might want to create this or handle the error!", key))
         }
 
-        return Ok(val);
+        return Ok(Tree::from(serde_json::to_string_pretty(val).unwrap().as_str()));
     }
 
     /// Check if the key exists in the database
@@ -205,6 +205,8 @@ impl Database {
 /// db.insert_tree("id", data_tree);
 /// ```
 /// Where the key always need to be a [String]
+
+#[derive(Debug)]
 pub struct Tree {
     pub children: Option<serde_json::Value>
 }
@@ -240,14 +242,14 @@ impl Tree {
     }
 
     /// Find a value in the sub tree in the database
-    pub fn find(&self, key: &str) -> Result<&serde_json::Value, String> {
+    pub fn find(&self, key: &str) -> Result<Tree, String> {
         let val = &self.children.as_ref().unwrap()[key];
 
         if val == &serde_json::Value::Null {
             return Err(format!("The key `{}` does not exist in the database. You might want to create this or handle the error!", key))
         }
 
-        return Ok(val);
+        return Ok(Tree::from(serde_json::to_string_pretty(val).unwrap().as_str()));
     }
 
     /// Check if the key exists in the sub tree of the main database

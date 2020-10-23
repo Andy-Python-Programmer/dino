@@ -26,7 +26,7 @@ fn main() {
     db.insert_tree("id", data_tree);
 
     // Print the value of id
-    println!("The value of key: id is {}", db.find("id").unwrap());
+    println!("The value of key: id is:\n{}", db.find("id").unwrap());
 
     match db.find("not_exists") {
         Ok(_value) => {
