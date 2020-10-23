@@ -261,32 +261,8 @@ impl Tree {
     }
 }
 
-#[derive(Debug)]
-pub enum Value {
-    /// If the value does **not** exist
-    NotExists,
-
-    /// If the type of the value is [String]
-    String(String),
-
-    /// If the type of the value is [bool]
-    Bool(bool)
-}
-
-impl fmt::Display for Value {
+impl fmt::Display for Tree {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            Value::NotExists => {
-                write!(f, "")
-            },
-
-            Value::Bool(ref v) => {
-                write!(f, "{}", v)
-            },
-
-            Value::String(ref v) => {
-                write!(f, "{}", v)
-            },
-        }
+        return write!(f, "{}", serde_json::to_string_pretty(&self.children).unwrap());
     }
 }
