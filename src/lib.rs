@@ -82,6 +82,7 @@
 use std::fs::{ OpenOptions, File };
 use std::io::SeekFrom;
 use std::io::prelude::*;
+use std::fmt;
 
 /// The main struct of Dino.
 /// The [Database] struct is responsible for creating the storage instance
@@ -135,33 +136,33 @@ impl Database {
 
     /// Insert a key with a subtree in the database
     pub fn insert_tree(&mut self, key: &str, value: Tree) {
-        self.truncate();
-
         self.json.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::from_str(value.children.unwrap().to_string().as_str()).unwrap());
-        self.file.as_mut().unwrap().write(self.json.as_ref().unwrap().to_string().as_bytes()).expect("Cannot write to the database!");
+        
+        self.save_data();
     }
 
     /// Insert a key and a value in the database
-    pub fn insert(&mut self, key: &str, value: &str) {
-        self.truncate();
-        
+    pub fn insert(&mut self, key: &str, value: &str) {        
         self.json.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::json!(value));
-        self.file.as_mut().unwrap().write(self.json.as_ref().unwrap().to_string().as_bytes()).expect("Cannot write to the database!");
+
+        self.save_data();
     }
 
     /// Remove a key in the database with its value
     pub fn remove(&mut self, key: &str) {
-        self.truncate();
-        
         self.json.as_mut().unwrap().as_object_mut().unwrap().remove(key);
-        self.file.as_mut().unwrap().write(self.json.as_ref().unwrap().to_string().as_bytes()).expect("Cannot write to the database!");
+        
+        self.save_data();
     }
 
     /// Private function but is very important. 
     /// This truncates the db before we write the json code again
-    fn truncate(&mut self) {
+    /// And saves the data to the file
+    fn save_data(&mut self) {
         self.file.as_ref().unwrap().set_len(0).unwrap();
         self.file.as_ref().unwrap().seek(SeekFrom::Start(0)).unwrap();
+
+        self.file.as_mut().unwrap().write(serde_json::to_string_pretty(&self.json.as_ref().unwrap()).unwrap().as_bytes()).expect("Cannot write to the database!");
     }
 
     /// Find a value in the db
@@ -216,6 +217,7 @@ impl Tree {
         }
     }
 
+    /// Create a new Tree from String value
     pub fn from(value: &str) -> Tree {
         return Tree {
             children: serde_json::from_str(value).unwrap()
@@ -256,5 +258,35 @@ impl Tree {
     /// Insert a key with a subtree in the subtree!
     pub fn insert_tree(&mut self, key: &str, value: Tree) {
         self.children.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::from_str(value.children.unwrap().to_string().as_str()).unwrap());
+    }
+}
+
+#[derive(Debug)]
+pub enum Value {
+    /// If the value does **not** exist
+    NotExists,
+
+    /// If the type of the value is [String]
+    String(String),
+
+    /// If the type of the value is [bool]
+    Bool(bool)
+}
+
+impl fmt::Display for Value {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Value::NotExists => {
+                write!(f, "")
+            },
+
+            Value::Bool(ref v) => {
+                write!(f, "{}", v)
+            },
+
+            Value::String(ref v) => {
+                write!(f, "{}", v)
+            },
+        }
     }
 }
