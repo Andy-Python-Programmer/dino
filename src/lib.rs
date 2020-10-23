@@ -266,3 +266,9 @@ impl fmt::Display for Tree {
         return write!(f, "{}", serde_json::to_string_pretty(&self.children).unwrap());
     }
 }
+
+impl fmt::Display for Database {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        return write!(f, "{}", serde_json::to_string_pretty(&self.json).unwrap());
+    }
+}
