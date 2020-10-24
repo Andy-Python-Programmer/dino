@@ -105,7 +105,7 @@ fn main() {
 }
 ```
 
-There is a lot more for you to explore! So check out https://docs.rs/dino/0.1.0/dino/ and the most important /examples/ directory!
+There is a lot more for you to explore! So check out the [docs](https://docs.rs/dino/0.1.0/dino/) and the [examples](https://github.com/Andy-Python-Programmer/dino/tree/master/examples) directory.
 
 ## License
 
