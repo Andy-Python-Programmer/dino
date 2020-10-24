@@ -83,6 +83,7 @@ use std::fs::{ OpenOptions, File };
 use std::io::SeekFrom;
 use std::io::prelude::*;
 use std::fmt;
+use std::sync::Mutex;
 
 /// The main struct of Dino.
 /// The [Database] struct is responsible for creating the storage instance
@@ -94,13 +95,13 @@ pub struct Database {
     pub path: String,
 
     /// The File object that we get when we open the database file
-    file: Option<File>,
+    file: Mutex<Option<File>>,
 
     /// The raw data in the file
-    data: Option<String>,
+    data: Mutex<Option<String>>,
     
     /// The json value of the file. Dino uses Json in backend to parse the database
-    json: Option<serde_json::Value>
+    json: Mutex<Option<serde_json::Value>>
 }
 
 impl Database {
@@ -108,9 +109,9 @@ impl Database {
     pub fn new(path: &str) -> Database {
         return Database {
             path: String::from(path),
-            file: None,
-            data: None,
-            json: None
+            file: Mutex::new(None),
+            data: Mutex::new(None),
+            json: Mutex::new(None)
         }
     }
 
@@ -129,28 +130,28 @@ impl Database {
 
         let json = serde_json::from_str(if buf == "" { "{}" } else { buf.as_str() }).unwrap();
 
-        self.file = Some(file);
-        self.data = Some(buf);
-        self.json = Some(json);
+        self.file = Mutex::new(Some(file));
+        self.data = Mutex::new(Some(buf));
+        self.json = Mutex::new(Some(json));
     }
 
     /// Insert a key with a subtree in the database
-    pub fn insert_tree(&mut self, key: &str, value: Tree) {
-        self.json.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::from_str(value.children.unwrap().to_string().as_str()).unwrap());
+    pub fn insert_tree(&self, key: &str, value: Tree) {
+        self.json.lock().unwrap().as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::from_str(value.children.unwrap().to_string().as_str()).unwrap());
         
         self.save_data();
     }
 
     /// Insert a key and a value in the database
-    pub fn insert(&mut self, key: &str, value: &str) {        
-        self.json.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::json!(value));
+    pub fn insert(&self, key: &str, value: &str) {        
+        self.json.lock().unwrap().as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::json!(value));
 
         self.save_data();
     }
 
     /// Remove a key in the database with its value
-    pub fn remove(&mut self, key: &str) {
-        self.json.as_mut().unwrap().as_object_mut().unwrap().remove(key);
+    pub fn remove(&self, key: &str) {
+        self.json.lock().unwrap().as_mut().unwrap().as_object_mut().unwrap().remove(key);
         
         self.save_data();
     }
@@ -158,32 +159,33 @@ impl Database {
     /// Private function but is very important. 
     /// This truncates the db before we write the json code again
     /// And saves the data to the file
-    fn save_data(&mut self) {
-        self.file.as_ref().unwrap().set_len(0).unwrap();
-        self.file.as_ref().unwrap().seek(SeekFrom::Start(0)).unwrap();
+    fn save_data(&self) {
+        self.file.lock().unwrap().as_ref().unwrap().set_len(0).unwrap();
+        self.file.lock().unwrap().as_ref().unwrap().seek(SeekFrom::Start(0)).unwrap();
 
-        self.file.as_mut().unwrap().write(serde_json::to_string_pretty(&self.json.as_ref().unwrap()).unwrap().as_bytes()).expect("Cannot write to the database!");
+        self.file.lock().unwrap().as_mut().unwrap().write(serde_json::to_string_pretty(&self.json.lock().unwrap().as_ref().unwrap()).unwrap().as_bytes()).expect("Cannot write to the database!");
     }
 
     /// Find a value in the db
     pub fn find(&self, key: &str) -> Result<Tree, String> {
-        let val = &self.json.as_ref().unwrap()[key];
+        let json = &self.json.lock().unwrap();
+        let val = &json.as_ref().unwrap()[key];
 
         if val == &serde_json::Value::Null {
             return Err(format!("The key `{}` does not exist in the database. You might want to create this or handle the error!", key))
         }
 
-        return Ok(Tree::from(serde_json::to_string_pretty(val).unwrap().as_str()));
+        return Ok(Tree::from(serde_json::to_string_pretty(&val).unwrap().as_str()));
     }
 
     /// Check if the key exists in the database
-    pub fn contains_key(&mut self, key: &str) -> bool {
-        return self.json.as_mut().unwrap().as_object_mut().unwrap().contains_key(key);
+    pub fn contains_key(&self, key: &str) -> bool {
+        return self.json.lock().unwrap().as_mut().unwrap().as_object_mut().unwrap().contains_key(key);
     }
 
     /// Return the length of items that are in the main tree
-    pub fn len(&mut self) -> usize {
-        return self.json.as_mut().unwrap().as_object_mut().unwrap().len();
+    pub fn len(&self) -> usize {
+        return self.json.lock().unwrap().as_mut().unwrap().as_object_mut().unwrap().len();
     }
 }
 
