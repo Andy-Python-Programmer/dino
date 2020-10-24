@@ -265,12 +265,16 @@ impl Tree {
     }
 }
 
+/// impl Display for Tree
+/// So we can print the tree to the display
 impl fmt::Display for Tree {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         return write!(f, "{}", serde_json::to_string_pretty(&self.children).unwrap());
     }
 }
 
+/// impl Display for database
+/// So we can print the whole tree to the display
 impl fmt::Display for Database {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         return write!(f, "{}", serde_json::to_string_pretty(&self.json).unwrap());
