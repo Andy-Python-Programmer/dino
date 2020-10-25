@@ -235,9 +235,14 @@ impl Tree {
         }
     }
 
-    /// Insert data in the sub tree
+    /// Insert data with [String] value type in the sub tree
     pub fn insert(&mut self, key: &str, value: &str) {
         self.children.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::Value::String(value.to_string()));
+    }
+
+    /// Insert data with [usize] value type in the sub tree
+    pub fn insert_number(&mut self, key: &str, value: usize) {
+        self.children.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::json!(value));
     }
 
     /// Return the length of items that are in the sub tree
