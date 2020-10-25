@@ -296,6 +296,11 @@ impl Value {
     pub fn to_number(&self) -> usize {
         return serde_json::to_string(&self.val).unwrap().parse::<usize>().unwrap();
     }
+
+    /// Return the Tree value
+    pub fn to_tree(&self) -> Tree {
+        return Tree::from(serde_json::to_string(&self.val).unwrap().as_str());
+    }
 }
 
 /// impl Display for Value
