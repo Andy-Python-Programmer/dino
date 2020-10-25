@@ -149,6 +149,13 @@ impl Database {
         self.save_data();
     }
 
+    /// Insert a key and a value in the database
+    pub fn insert_number(&self, key: &str, value: usize) {        
+        self.json.lock().unwrap().as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::json!(value));
+
+        self.save_data();
+    }
+
     /// Remove a key in the database with its value
     pub fn remove(&self, key: &str) {
         self.json.lock().unwrap().as_mut().unwrap().as_object_mut().unwrap().remove(key);
@@ -167,7 +174,7 @@ impl Database {
     }
 
     /// Find a value in the db
-    pub fn find(&self, key: &str) -> Result<Tree, String> {
+    pub fn find(&self, key: &str) -> Result<Value, String> {
         let json = &self.json.lock().unwrap();
         let val = &json.as_ref().unwrap()[key];
 
@@ -175,7 +182,7 @@ impl Database {
             return Err(format!("The key `{}` does not exist in the database. You might want to create this or handle the error!", key))
         }
 
-        return Ok(Tree::from(serde_json::to_string_pretty(&val).unwrap().as_str()));
+        return Ok(Value::from(serde_json::to_string_pretty(&val).unwrap().as_str()));
     }
 
     /// Check if the key exists in the database
@@ -210,7 +217,7 @@ impl Database {
 
 #[derive(Debug)]
 pub struct Tree {
-    pub children: Option<serde_json::Value>
+    children: Option<serde_json::Value>
 }
 
 impl Tree {
@@ -244,14 +251,14 @@ impl Tree {
     }
 
     /// Find a value in the sub tree in the database
-    pub fn find(&self, key: &str) -> Result<Tree, String> {
+    pub fn find(&self, key: &str) -> Result<Value, String> {
         let val = &self.children.as_ref().unwrap()[key];
 
         if val == &serde_json::Value::Null {
             return Err(format!("The key `{}` does not exist in the database. You might want to create this or handle the error!", key))
         }
 
-        return Ok(Tree::from(serde_json::to_string_pretty(val).unwrap().as_str()));
+        return Ok(Value::from(serde_json::to_string_pretty(val).unwrap().as_str()));
     }
 
     /// Check if the key exists in the sub tree of the main database
@@ -262,6 +269,64 @@ impl Tree {
     /// Insert a key with a subtree in the subtree!
     pub fn insert_tree(&mut self, key: &str, value: Tree) {
         self.children.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::from_str(value.children.unwrap().to_string().as_str()).unwrap());
+    }
+}
+
+/// This struct is returned when you find something in the database.
+/// Value also impls fmt::Display
+pub struct Value {
+    val: serde_json::Value
+}
+
+/// Impl for Value struct
+impl Value {
+    /// Value from &str
+    fn from(value: &str) -> Value{
+        return Value {
+            val: serde_json::from_str(value).unwrap()
+        }
+    }
+
+    /// Return the string value
+    pub fn to_string(&self) -> String {
+        return serde_json::to_string(&self.val).unwrap();
+    }
+
+    /// Return the number value
+    pub fn to_number(&self) -> usize {
+        return serde_json::to_string(&self.val).unwrap().parse::<usize>().unwrap();
+    }
+}
+
+/// impl Display for Value
+/// So we can print the Value to the screen
+impl fmt::Display for Value {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self.val {
+            serde_json::Value::Null => {
+                write!(f, "")
+            },
+
+            serde_json::Value::Bool(ref v) => {
+                write!(f, "{}", v)
+            },
+
+            serde_json::Value::String(ref v) => {
+                write!(f, "{}", v)
+            },
+
+            serde_json::Value::Number(ref v) => {
+                write!(f, "{}", v)
+            },
+
+            serde_json::Value::Array(ref v) => {
+                write!(f, "{}", serde_json::to_string_pretty(v).unwrap())
+            },
+
+            serde_json::Value::Object(ref v) => {
+                write!(f, "{}", serde_json::to_string_pretty(v).unwrap())
+            },
+        }
     }
 }
 
