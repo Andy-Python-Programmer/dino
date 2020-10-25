@@ -279,6 +279,8 @@ impl Tree {
 
 /// This struct is returned when you find something in the database.
 /// Value also impls fmt::Display
+
+#[derive(Debug)]
 pub struct Value {
     val: serde_json::Value
 }
