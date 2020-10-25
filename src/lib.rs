@@ -1,4 +1,16 @@
+//! `Dino` is a lightweight database for rust!
+//! It makes writing databases with types more easy.
+//! Normally if you use a File Storage database then you will have to parse the types by yourself
+//! 
+//! Dino uses json ie. You will have all of the basic types like [bool], [usize], [str], etc... and the special one is [Tree]
+//! Dino is special about trees. Because some of the databases allow you to open trees but you cannot open sub trees there.
+//! You can P easily open a sub tree. Here are some of the examples that show how to use trees 
+//! and how to use the database without sub trees ;)
+//! 
 //! ## Basic Database
+//! `Note:` In this example we are not making a sub tree as everything goes into the `main` tree.
+//! All of the sub trees also go in the `main` tree.
+//! We can directly insert values into the main tree too
 //! 
 //! ```rust
 //! // Create the database instance
@@ -13,6 +25,9 @@
 //! ```
 //! 
 //! ## Sub Trees
+//! 
+//! `Note:` Here we are making a sub tree!
+//! Now in this case making a sub tree is essential as there is a `id` key with some values
 //! 
 //! ```rust
 //! 
@@ -77,6 +92,53 @@
 //! };
 //!
 //! println!("The length of items in the database is: {}", db.len());
+//! ```
+//! ## Using it with rocket.rs
+//! 
+//! ```rust
+//! // Simple rocket route
+//! #[get("/<id>")]
+//! // Here we add the arg `db: State<dino::Database>`
+//! // To get the db state that we passed before!
+//! fn hello(db: State<dino::Database>, id: String) -> String {
+//!     // Now in this rocket route we take a id param
+//!     // We will extract the param to str
+//!     // Then check if it exists
+//!     match db.find(id.as_str()) {
+//!         // If it exists it will return Ok(value)
+//!         Ok(value) => {
+//!             // Then we can return the value!
+//!             return value.to_string();
+//!         }
+//!
+//!         // If it does not exists it gives a error
+//!         Err(error) => {
+//!             // So return the error!
+//!             // You might want to handle the error too!
+//!             return error;
+//!         }
+//!    }
+//! }
+//!
+//! fn main() {
+//!     // Create the database instance
+//!     let mut db = dino::Database::new("rocket.dino");
+//!
+//!     // Load and create the database if does not exist
+//!     db.load();
+//!
+//!     // Insert a key with a dummy value for now!
+//!     db.insert("key", "value!");
+//!
+//!     // Ignite the rocket and mount the routes
+//!     rocket::ignite()
+//!         .mount("/", routes![hello])
+//!         // Important part here!
+//!         // Here we pass the db state to rocket
+//!         // So we can access it when we go to any route.
+//!         .manage(db)
+//!         .launch();
+//! }
 //! ```
 
 use std::fs::{ OpenOptions, File };

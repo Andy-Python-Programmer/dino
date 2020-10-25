@@ -4,6 +4,14 @@
 ![Crates.io](https://img.shields.io/crates/d/dino)
 ![Crates.io](https://img.shields.io/crates/v/dino)
 
+`Dino` is a lightweight database for rust!
+It makes writing databases with types more easy.
+Normally if you use a File Storage database then you will have to parse the types by yourself
+
+Dino uses json ie. You will have all of the basic types like [bool], [usize], [str], etc... and the special one is [Tree]
+Dino is special about trees. Because some of the databases allow you to open trees but you cannot open sub trees there.
+You can P easily open a sub tree. Here are some of the examples that show how to use trees and how to use the database without sub trees ;)
+
 ## Example Code
 
 ### Basic Database
@@ -105,7 +113,13 @@ fn main() {
 
 There is a lot more for you to explore! So check out the [docs](https://docs.rs/dino/0.1.0/dino/) and the [examples](https://github.com/Andy-Python-Programmer/dino/tree/master/examples) directory.
 
-## License
+## Contributing
+Contributions are always welcome! Here are some ways you can contribute to dino:
 
+1. File issues and buggs
+2. Help us with documentation
+3. Add features in dino and fix buggs!
+
+## License
 Licensed under either of Apache License, Version 2.0 or MIT license at your option.
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in this crate by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
