@@ -141,6 +141,9 @@
 //! }
 //! ```
 
+#![feature(test)]
+extern crate test;
+
 use std::fs::{ OpenOptions, File };
 use std::io::SeekFrom;
 use std::io::prelude::*;
@@ -417,5 +420,30 @@ impl fmt::Display for Tree {
 impl fmt::Display for Database {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         return write!(f, "{}", serde_json::to_string_pretty(&self.json).unwrap());
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[bench]
+    fn create_speed(b: &mut test::Bencher) {
+        b.iter(|| {
+            let mut db = Database::new("create_speed.dino");
+
+            db.load();
+        });
+    }
+
+    #[bench]
+    fn insert_speed(b: &mut test::Bencher) {
+        b.iter(|| {
+            let mut db = Database::new("basic_operations.dino");
+
+            db.load();
+
+            db.insert("foo", "bar");
+        });
     }
 }
