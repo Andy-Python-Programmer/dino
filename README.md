@@ -8,7 +8,7 @@
 It makes writing databases with types more easy.
 Normally if you use a File Storage database then you will have to parse the types by yourself
 
-Dino uses json ie. You will have all of the basic types like [bool], [usize], [str], etc... and the special one is [Tree]
+Dino uses json ie. You will have all of the basic types like [bool](https://doc.rust-lang.org/nightly/std/primitive.bool.html), [usize](https://doc.rust-lang.org/nightly/std/primitive.usize.html), [str](https://doc.rust-lang.org/nightly/std/primitive.str.html), etc... and the special one is Tree.
 Dino is special about trees. Because some of the databases allow you to open trees but you cannot open sub trees there.
 You can P easily open a sub tree. Here are some of the examples that show how to use trees and how to use the database without sub trees ;)
 
