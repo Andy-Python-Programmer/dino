@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-
+ 
     runs-on: ubuntu-latest
 
     steps:
@@ -20,6 +20,6 @@ jobs:
       with:
         toolchain: nightly
     - name: Build
-      run: cargo build --verbose
+      run: cargo +nightly build --verbose
     - name: Run tests
-      run: cargo run --example database
+      run: cargo +nightly run --example database
