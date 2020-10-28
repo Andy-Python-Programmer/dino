@@ -118,7 +118,7 @@ Contributions are always welcome! Here are some ways you can contribute to dino:
 
 1. File issues and buggs
 2. Help us with documentation
-3. Add features in dino and fix buggs!
+3. Add new features in dino and fix buggs!
 
 ## License
 Licensed under either of Apache License, Version 2.0 or MIT license at your option.
