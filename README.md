@@ -111,7 +111,7 @@ fn main() {
 }
 ```
 
-There is a lot more for you to explore! So check out the [docs](https://docs.rs/dino/0.1.0/dino/) and the [examples](https://github.com/Andy-Python-Programmer/dino/tree/master/examples) directory.
+There is a lot more for you to explore! So check out the [docs](https://docs.rs/dino/0.1.1/dino/) and the [examples](https://github.com/Andy-Python-Programmer/dino/tree/master/examples) directory.
 
 ## Contributing
 Contributions are always welcome! Here are some ways you can contribute to dino:
