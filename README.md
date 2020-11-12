@@ -3,6 +3,7 @@
 ![Crates.io](https://github.com/Andy-Python-Programmer/dino/workflows/Build/badge.svg)
 ![Crates.io](https://img.shields.io/crates/d/dino)
 ![Crates.io](https://img.shields.io/crates/v/dino)
+![Crates.io](https://docs.rs/dino/badge.svg)
 
 `Dino` is a lightweight database for rust!
 It makes writing databases with types more easy.
