@@ -316,6 +316,10 @@ impl Tree {
         self.children.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::json!(value));
     }
 
+    pub fn insert_array(&mut self, key: &str, value: Vec<&str>) {
+        self.children.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::json!(value));
+    }
+
     /// Return the length of items that are in the sub tree
     pub fn len(&mut self) -> usize {
         return self.children.as_mut().unwrap().as_object_mut().unwrap().len();
@@ -378,6 +382,13 @@ impl Value {
     /// Return the Tree value
     pub fn to_tree(&self) -> Tree {
         return Tree::from(serde_json::to_string(&self.val).unwrap().as_str());
+    }
+
+    /// Return the Array value
+    pub fn to_vec(&self) -> Vec<String> {
+        let vector: Vec<String> = serde_json::from_str(serde_json::to_string(&self.val).unwrap().as_str()).unwrap();
+
+        return vector;
     }
 }
 
