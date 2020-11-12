@@ -221,6 +221,12 @@ impl Database {
         self.save_data();
     }
 
+    pub fn insert_array(&self, key: &str, value: Vec<&str>) {
+        self.json.lock().unwrap().as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::json!(value));
+
+        self.save_data();
+    }
+
     /// Remove a key in the database with its value
     pub fn remove(&self, key: &str) {
         self.json.lock().unwrap().as_mut().unwrap().as_object_mut().unwrap().remove(key);

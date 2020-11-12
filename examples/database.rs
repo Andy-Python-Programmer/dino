@@ -52,4 +52,6 @@ fn main() {
     db.insert_number("test", 1);
 
     println!("{}", db.find("test").unwrap().to_number() + 1); // This will print 2
+
+    db.insert_array("test-array", vec!["hello!"]);
 }
