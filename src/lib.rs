@@ -371,7 +371,7 @@ impl Value {
 
     /// Return the string value
     pub fn to_string(&self) -> String {
-        return serde_json::to_string(&self.val).unwrap();
+        return self.val.as_str().unwrap().to_string();
     }
 
     /// Return the number value
@@ -390,6 +390,10 @@ impl Value {
 
         return vector;
     }
+
+    pub fn to_json(&self) -> &serde_json::Value {
+        return &self.val;
+    } 
 }
 
 /// impl Display for Value
