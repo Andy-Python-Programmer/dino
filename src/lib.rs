@@ -227,6 +227,12 @@ impl Database {
         self.save_data();
     }
 
+    pub fn insert_bool(&self, key: &str, value: bool) {
+        self.json.lock().unwrap().as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::json!(value));
+
+        self.save_data();
+    }
+
     /// Remove a key in the database with its value
     pub fn remove(&self, key: &str) {
         self.json.lock().unwrap().as_mut().unwrap().as_object_mut().unwrap().remove(key);
@@ -320,6 +326,10 @@ impl Tree {
         self.children.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::json!(value));
     }
 
+    pub fn insert_bool(&mut self, key: &str, value: bool) {
+        self.children.as_mut().unwrap().as_object_mut().unwrap().insert(key.to_string(), serde_json::json!(value));
+    }
+
     /// Return the length of items that are in the sub tree
     pub fn len(&mut self) -> usize {
         return self.children.as_mut().unwrap().as_object_mut().unwrap().len();
@@ -389,6 +399,11 @@ impl Value {
         let vector: Vec<String> = serde_json::from_str(serde_json::to_string(&self.val).unwrap().as_str()).unwrap();
 
         return vector;
+    }
+
+    /// Return the bool value
+    pub fn to_bool(&self) -> bool {
+        return serde_json::to_string(&self.val).unwrap().parse::<bool>().unwrap();
     }
 
     pub fn to_json(&self) -> &serde_json::Value {
